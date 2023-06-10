@@ -3,6 +3,7 @@ dotenv.config();
 
 import express from "express";
 import cors from "cors";
+import "./config/db";
 
 const app = express();
 
@@ -15,6 +16,6 @@ app.get("/sample", (req: express.Request, res: express.Response) => {
   res.sendStatus(200);
 });
 
-app.listen(process.env.PORT || 8080, () => {
+app.listen(process.env.PORT || 8000, () => {
   console.log("Server deployed");
 });
