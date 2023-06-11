@@ -14,6 +14,7 @@ export type InstrumentType = {
 };
 
 export type ApplicationType = {
+  id: number;
   x: number;
   y: number;
   radius: number;
@@ -87,6 +88,42 @@ const addApplication = async (_application: ApplicationType) => {
   }
 };
 
+const updateApplication = async (_application: ApplicationType) => {
+  try {
+    const application = await Application.update(
+      {
+        name: _application.name,
+        x: _application.x,
+        y: _application.y,
+        radius: _application.y,
+        status: _application.status,
+        user_id: _application.user,
+        instrument_id: _application.instrument,
+      },
+      {
+        where: {
+          id: _application.id,
+        },
+      }
+    );
+    if (!application)
+      return {
+        status: false,
+        message: "Application hasn't been added",
+      };
+    return {
+      status: true,
+      application,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      status: false,
+      message: "DB error occured",
+    };
+  }
+};
+
 class ApplicationController {
   async getInstruments(req: express.Request, res: express.Response) {
     try {
@@ -110,6 +147,7 @@ class ApplicationController {
     try {
       const { instrument, name, x, y, radius, status } = req.body;
       const applicationResult: ICreateApplicationResult = await addApplication({
+        id: -1,
         instrument,
         name,
         x,
@@ -188,6 +226,28 @@ class ApplicationController {
       }
       const result: IUpdateApplicationResult = { status: true };
       res.send(result);
+    } catch (error) {
+      console.log(error);
+      const result: IUpdateApplicationResult = { status: false };
+      res.send(result);
+    }
+  }
+
+  async updateApplication(req: express.Request, res: express.Response) {
+    try {
+      const { id, instrument, name, x, y, radius, status } = req.body;
+      const applicationResult: IUpdateApplicationResult = await updateApplication({
+        id,
+        instrument,
+        name,
+        x,
+        y,
+        radius,
+        user: req.user!.data.id!,
+        status: status,
+      });
+
+      res.send(applicationResult);
     } catch (error) {
       console.log(error);
       const result: IUpdateApplicationResult = { status: false };

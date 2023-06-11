@@ -56,6 +56,11 @@ app.post(
   passport.authenticate("jwt", { session: false }),
   ApplicationController.updateApplicationStatus
 );
+app.post(
+  "/applications/update",
+  passport.authenticate("jwt", { session: false }),
+  ApplicationController.updateApplication
+);
 
 app.listen(process.env.PORT || 8000, () => {
   console.log("Server deployed");
