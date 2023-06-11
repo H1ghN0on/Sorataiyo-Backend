@@ -54,6 +54,10 @@ interface IGetApplicationByIdResult {
   application?: ApplicationViewType;
 }
 
+interface IUpdateApplicationResult {
+  status: boolean;
+}
+
 const addApplication = async (_application: ApplicationType) => {
   try {
     const application = await Application.create({
@@ -135,6 +139,18 @@ class ApplicationController {
     }
   }
 
+  async getPendingApplications(req: express.Request, res: express.Response) {
+    try {
+      const applications = await Application.findAll({ where: { status: "pending" } });
+      const result: IGetApplicationsResult = { status: true, applications };
+      res.send(result);
+    } catch (error) {
+      console.log(error);
+      const result: IGetApplicationsResult = { status: false, applications: [] };
+      res.send(result);
+    }
+  }
+
   async getApplicationById(req: express.Request, res: express.Response) {
     try {
       const application = await Application.findOne({
@@ -150,6 +166,31 @@ class ApplicationController {
     } catch (error) {
       console.log(error);
       const result: IGetApplicationByIdResult = { status: false };
+      res.send(result);
+    }
+  }
+
+  async updateApplicationStatus(req: express.Request, res: express.Response) {
+    try {
+      const { id, review, status } = req.body;
+      const application = await Application.update(
+        {
+          status,
+          review,
+        },
+        {
+          where: { id: id },
+        }
+      );
+      if (!application) {
+        const result: IUpdateApplicationResult = { status: false };
+        return res.send(result);
+      }
+      const result: IUpdateApplicationResult = { status: true };
+      res.send(result);
+    } catch (error) {
+      console.log(error);
+      const result: IUpdateApplicationResult = { status: false };
       res.send(result);
     }
   }

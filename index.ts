@@ -42,9 +42,19 @@ app.get(
   ApplicationController.getApplications
 );
 app.get(
+  "/applications/pending/get",
+  passport.authenticate("jwt", { session: false }),
+  ApplicationController.getPendingApplications
+);
+app.get(
   "/applications/get/:id",
   passport.authenticate("jwt", { session: false }),
   ApplicationController.getApplicationById
+);
+app.post(
+  "/applications/status/update",
+  passport.authenticate("jwt", { session: false }),
+  ApplicationController.updateApplicationStatus
 );
 
 app.listen(process.env.PORT || 8000, () => {
