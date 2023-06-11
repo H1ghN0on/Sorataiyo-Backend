@@ -17,23 +17,21 @@ interface ICheckEmailExistenceResult {
 
 interface IRegisterResult {
   status: boolean;
-  user: UserType | null;
+  token: string;
   message: "" | "Error occured";
 }
 
 interface ILoginResult {
   status: boolean;
-  user: UserType | null;
+  token: string;
   message: "" | "Error occured";
 }
 
 const getUserByEmail = async (email: string) => {
   try {
     const user = await User.findOne({ where: { email } });
-    if (user) {
-      return { status: true };
-    }
-  } finally {
+    return { status: !!user };
+  } catch {
     return { status: false };
   }
 };
@@ -104,7 +102,7 @@ class UserController {
 
     const result: IRegisterResult = {
       status,
-      user,
+      token: user ? user.token : "",
       message: status ? "" : "Error occured",
     };
     res.send(result);
@@ -116,7 +114,7 @@ class UserController {
 
     const result: ILoginResult = {
       status,
-      user,
+      token: user ? user.token : "",
       message: status ? "" : "Error occured",
     };
     res.send(result);
