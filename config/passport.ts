@@ -12,11 +12,11 @@ passport.use(
   })
 );
 
-passport.serializeUser((user, cb) => {
+passport.serializeUser((user: any, cb) => {
   cb(null, user);
 });
 
-passport.deserializeUser((obj: UserType, cb) => {
+passport.deserializeUser((obj: any, cb) => {
   cb(null, obj);
 });
 

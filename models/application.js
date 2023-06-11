@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         references: { model: "Instruments", key: "id" },
       },
-      status: DataTypes.ENUM("rejected", "completed", "accepted"),
+      status: DataTypes.STRING,
       user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,

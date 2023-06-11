@@ -6,7 +6,11 @@ module.exports = {
     return queryInterface.addColumn(
       "Applications",
       "status",
-      Sequelize.ENUM("rejected", "accepted", "completed")
+      Sequelize.ENUM("rejected", "accepted", "completed", "pending")
     );
+  },
+
+  async down(queryInterface, Sequelize) {
+    return queryInterface.removeColumn("Applications", "status");
   },
 };

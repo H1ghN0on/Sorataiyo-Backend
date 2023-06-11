@@ -8,7 +8,7 @@ import session from "express-session";
 import "./config/db";
 import { passport } from "./config/passport";
 
-import { UserController } from "./controllers";
+import { ApplicationController, UserController } from "./controllers";
 
 const app = express();
 
@@ -24,6 +24,18 @@ app.get("/auth/me", passport.authenticate("jwt", { session: false }), UserContro
 app.post("/auth/check-email", UserController.checkEmailExistence);
 app.post("/auth/login", UserController.loginUser);
 app.post("/auth/register", UserController.registerUser);
+
+//Application Controller
+app.get(
+  "/applications/get-instruments",
+  passport.authenticate("jwt", { session: false }),
+  ApplicationController.getInstruments
+);
+app.post(
+  "/applications/create",
+  passport.authenticate("jwt", { session: false }),
+  ApplicationController.createApplication
+);
 
 app.listen(process.env.PORT || 8000, () => {
   console.log("Server deployed");

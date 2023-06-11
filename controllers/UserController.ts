@@ -4,6 +4,7 @@ import createJWToken from "../utils/createJWToken";
 const { User } = require("../models");
 
 export type UserType = {
+  id?: number;
   email: string;
   firstName: string;
   lastName: string;
