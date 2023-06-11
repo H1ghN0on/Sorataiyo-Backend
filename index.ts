@@ -61,6 +61,11 @@ app.post(
   passport.authenticate("jwt", { session: false }),
   ApplicationController.updateApplication
 );
+app.delete(
+  "/applications/delete/:id",
+  passport.authenticate("jwt", { session: false }),
+  ApplicationController.deleteApplication
+);
 
 app.listen(process.env.PORT || 8000, () => {
   console.log("Server deployed");

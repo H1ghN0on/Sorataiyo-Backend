@@ -59,6 +59,10 @@ interface IUpdateApplicationResult {
   status: boolean;
 }
 
+interface IDeleteApplicationResult {
+  status: boolean;
+}
+
 const addApplication = async (_application: ApplicationType) => {
   try {
     const application = await Application.create({
@@ -251,6 +255,18 @@ class ApplicationController {
     } catch (error) {
       console.log(error);
       const result: IUpdateApplicationResult = { status: false };
+      res.send(result);
+    }
+  }
+
+  async deleteApplication(req: express.Request, res: express.Response) {
+    try {
+      await Application.destroy({ where: { id: req.params.id } });
+      const deleteResult: IDeleteApplicationResult = { status: true };
+      res.send(deleteResult);
+    } catch (error) {
+      console.log(error);
+      const result: IDeleteApplicationResult = { status: false };
       res.send(result);
     }
   }
