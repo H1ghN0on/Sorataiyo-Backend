@@ -3,9 +3,9 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     // logic for transforming into the new state
-    return queryInterface.addColumn("Applications", "user_id", {
+    return queryInterface.addColumn("applications", "user_id", {
       type: Sequelize.INTEGER,
-      references: { model: "Users", key: "id" },
+      references: { model: "users", key: "id" },
       allowNull: false,
     });
   },

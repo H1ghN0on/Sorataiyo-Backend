@@ -3,12 +3,12 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.changeColumn("Applications", "status", Sequelize.STRING);
+    return queryInterface.changeColumn("applications", "status", Sequelize.STRING);
   },
 
   async down(queryInterface, Sequelize) {
     return queryInterface.changeColumn(
-      "Applications",
+      "applications",
       "status",
       Sequelize.ENUM("rejected", "accepted", "completed", "pending")
     );

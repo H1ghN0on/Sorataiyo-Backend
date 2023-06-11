@@ -23,6 +23,16 @@ export type ApplicationType = {
   name: string;
 };
 
+export type ApplicationViewType = {
+  x: number;
+  y: number;
+  radius: number;
+  instrument: string;
+  status: string;
+  user: string;
+  name: string;
+};
+
 interface IGetInstrumentsResult {
   status: boolean;
   instruments: InstrumentType[];
@@ -32,6 +42,11 @@ interface ICreateApplicationResult {
   status: boolean;
   message?: string;
   applicaiton?: ApplicationType;
+}
+
+interface IGetApplicationsResult {
+  status: boolean;
+  applications: ApplicationViewType[];
 }
 
 const addApplication = async (_application: ApplicationType) => {
@@ -99,6 +114,20 @@ class ApplictaionController {
     } catch (error) {
       console.log(error);
       const result: ICreateApplicationResult = { status: false, message: "DB problem occured" };
+      res.send(result);
+    }
+  }
+
+  async getApplications(req: express.Request, res: express.Response) {
+    try {
+      const applications = await Application.findAll({
+        include: Instrument,
+      });
+      const result: IGetApplicationsResult = { status: true, applications };
+      res.send(result);
+    } catch (error) {
+      console.log(error);
+      const result: IGetApplicationsResult = { status: false, applications: [] };
       res.send(result);
     }
   }

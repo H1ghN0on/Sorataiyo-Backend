@@ -4,13 +4,13 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     // logic for transforming into the new state
     return queryInterface.addColumn(
-      "Applications",
+      "applications",
       "status",
       Sequelize.ENUM("rejected", "accepted", "completed", "pending")
     );
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.removeColumn("Applications", "status");
+    return queryInterface.removeColumn("applications", "status");
   },
 };
