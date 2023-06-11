@@ -41,6 +41,11 @@ app.get(
   passport.authenticate("jwt", { session: false }),
   ApplicationController.getApplications
 );
+app.get(
+  "/applications/get/:id",
+  passport.authenticate("jwt", { session: false }),
+  ApplicationController.getApplicationById
+);
 
 app.listen(process.env.PORT || 8000, () => {
   console.log("Server deployed");

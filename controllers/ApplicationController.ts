@@ -49,6 +49,11 @@ interface IGetApplicationsResult {
   applications: ApplicationViewType[];
 }
 
+interface IGetApplicationByIdResult {
+  status: boolean;
+  application?: ApplicationViewType;
+}
+
 const addApplication = async (_application: ApplicationType) => {
   try {
     const application = await Application.create({
@@ -78,7 +83,7 @@ const addApplication = async (_application: ApplicationType) => {
   }
 };
 
-class ApplictaionController {
+class ApplicationController {
   async getInstruments(req: express.Request, res: express.Response) {
     try {
       const instruments = await Instrument.findAll();
@@ -120,9 +125,7 @@ class ApplictaionController {
 
   async getApplications(req: express.Request, res: express.Response) {
     try {
-      const applications = await Application.findAll({
-        include: Instrument,
-      });
+      const applications = await Application.findAll();
       const result: IGetApplicationsResult = { status: true, applications };
       res.send(result);
     } catch (error) {
@@ -131,6 +134,25 @@ class ApplictaionController {
       res.send(result);
     }
   }
+
+  async getApplicationById(req: express.Request, res: express.Response) {
+    try {
+      const application = await Application.findOne({
+        where: { id: req.params.id },
+        include: Instrument,
+      });
+      if (!application) {
+        const result: IGetApplicationByIdResult = { status: false };
+        return res.send(result);
+      }
+      const result: IGetApplicationByIdResult = { status: true, application };
+      res.send(result);
+    } catch (error) {
+      console.log(error);
+      const result: IGetApplicationByIdResult = { status: false };
+      res.send(result);
+    }
+  }
 }
 
-export default new ApplictaionController();
+export default new ApplicationController();
