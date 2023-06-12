@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Session extends Model {
     /**
@@ -10,15 +8,25 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Session.hasMany(models.RecordsResult);
+      Session.belongsTo(models.Application);
     }
   }
-  Session.init({
-    start_timestamp: DataTypes.DATE,
-    end_timestamp: DataTypes.DATE
-  }, {
-    sequelize,
-    modelName: 'Session',
-  });
+  Session.init(
+    {
+      startTimestamp: DataTypes.DATE,
+      endTimestamp: DataTypes.DATE,
+      applicationId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: { model: "Applications", key: "id" },
+      },
+    },
+    {
+      sequelize,
+      modelName: "Session",
+      underscored: true,
+    }
+  );
   return Session;
 };

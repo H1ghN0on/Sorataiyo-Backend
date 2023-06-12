@@ -15,6 +15,11 @@ module.exports = {
       end_timestamp: {
         type: Sequelize.DATE,
       },
+      application_id: {
+        type: Sequelize.INTEGER,
+        references: { model: "applications", key: "id" },
+        onDelete: "CASCADE",
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

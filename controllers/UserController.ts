@@ -41,8 +41,8 @@ const addUser = async (user: Omit<UserType, "token">): Promise<[boolean, UserTyp
   const { lastName, firstName, password, email } = user;
   try {
     const user = await User.create({
-      first_name: firstName,
-      last_name: lastName,
+      firstName,
+      lastName,
       password,
       email,
       status: "user",

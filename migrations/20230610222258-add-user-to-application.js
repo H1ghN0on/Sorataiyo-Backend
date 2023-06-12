@@ -6,6 +6,7 @@ module.exports = {
     return queryInterface.addColumn("applications", "user_id", {
       type: Sequelize.INTEGER,
       references: { model: "users", key: "id" },
+      onDelete: "CASCADE",
       allowNull: false,
     });
   },

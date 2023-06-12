@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Instrument.hasMany(models.Application);
     }
   }
   Instrument.init(
@@ -21,10 +21,6 @@ module.exports = (sequelize, DataTypes) => {
       underscored: true,
     }
   );
-
-  Instrument.associate = (models) => {
-    Instrument.hasMany(models.Application);
-  };
 
   return Instrument;
 };

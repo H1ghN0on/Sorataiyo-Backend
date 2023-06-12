@@ -1,5 +1,6 @@
 import express from "express";
-
+import { Op } from "sequelize";
+import { createSession, endSession } from "./SessionController";
 const { Instrument, Application } = require("../models");
 
 enum ApplicationStatus {
@@ -171,7 +172,7 @@ class ApplicationController {
 
   async getApplications(req: express.Request, res: express.Response) {
     try {
-      const applications = await Application.findAll();
+      const applications = await Application.findAll({ where: { user_id: req.user!.data.id } });
       const result: IGetApplicationsResult = { status: true, applications };
       res.send(result);
     } catch (error) {
@@ -181,9 +182,11 @@ class ApplicationController {
     }
   }
 
-  async getPendingApplications(req: express.Request, res: express.Response) {
+  async getAdminApplications(req: express.Request, res: express.Response) {
     try {
-      const applications = await Application.findAll({ where: { status: "pending" } });
+      const applications = await Application.findAll({
+        where: { status: { [Op.or]: ["pending", "accepted"] } },
+      });
       const result: IGetApplicationsResult = { status: true, applications };
       res.send(result);
     } catch (error) {
@@ -228,6 +231,13 @@ class ApplicationController {
         const result: IUpdateApplicationResult = { status: false };
         return res.send(result);
       }
+      if (status === "accepted") {
+        const sessionResult = await createSession(id);
+        if (!sessionResult.status) {
+          const result: IUpdateApplicationResult = { status: false };
+          return res.send(result);
+        }
+      }
       const result: IUpdateApplicationResult = { status: true };
       res.send(result);
     } catch (error) {
@@ -252,6 +262,36 @@ class ApplicationController {
       });
 
       res.send(applicationResult);
+    } catch (error) {
+      console.log(error);
+      const result: IUpdateApplicationResult = { status: false };
+      res.send(result);
+    }
+  }
+
+  async completeApplication(req: express.Request, res: express.Response) {
+    try {
+      const { id } = req.params;
+      const application = await Application.update(
+        {
+          status: "completed",
+        },
+        {
+          where: { id: +id },
+        }
+      );
+      if (!application) {
+        const result: IUpdateApplicationResult = { status: false };
+        return res.send(result);
+      }
+
+      const sessionResult = await endSession(+id);
+      if (!sessionResult.status) {
+        const result: IUpdateApplicationResult = { status: false };
+        return res.send(result);
+      }
+      const result: IUpdateApplicationResult = { status: true };
+      res.send(result);
     } catch (error) {
       console.log(error);
       const result: IUpdateApplicationResult = { status: false };

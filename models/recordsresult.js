@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      RecordsResult.belongsTo(models.Session);
     }
   }
   RecordsResult.init(
@@ -25,12 +25,13 @@ module.exports = (sequelize, DataTypes) => {
       session_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "Sessions", key: "id" },
+        references: { model: "Session", key: "id" },
       },
     },
     {
       sequelize,
       modelName: "RecordsResult",
+      underscored: true,
     }
   );
   return RecordsResult;

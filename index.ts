@@ -42,9 +42,9 @@ app.get(
   ApplicationController.getApplications
 );
 app.get(
-  "/applications/pending/get",
+  "/applications/admin/get",
   passport.authenticate("jwt", { session: false }),
-  ApplicationController.getPendingApplications
+  ApplicationController.getAdminApplications
 );
 app.get(
   "/applications/get/:id",
@@ -60,6 +60,11 @@ app.post(
   "/applications/update",
   passport.authenticate("jwt", { session: false }),
   ApplicationController.updateApplication
+);
+app.get(
+  "/applications/complete/:id",
+  passport.authenticate("jwt", { session: false }),
+  ApplicationController.completeApplication
 );
 app.delete(
   "/applications/delete/:id",

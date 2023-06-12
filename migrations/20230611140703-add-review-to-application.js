@@ -5,7 +5,7 @@ module.exports = {
     // logic for transforming into the new state
     return queryInterface.addColumn("applications", "review", {
       type: Sequelize.STRING,
-      defaultValut: "",
+      defaultValue: "",
     });
   },
 

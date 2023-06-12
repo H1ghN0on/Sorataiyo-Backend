@@ -40,6 +40,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: { model: "sessions", key: "id" },
         allowNull: false,
+        onDelete: "CASCADE",
       },
       created_at: {
         allowNull: false,
