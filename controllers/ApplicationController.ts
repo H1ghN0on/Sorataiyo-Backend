@@ -72,8 +72,8 @@ const addApplication = async (_application: ApplicationType) => {
       y: _application.y,
       radius: _application.y,
       status: _application.status,
-      user_id: _application.user,
-      instrument_id: _application.instrument,
+      userId: _application.user,
+      instrumentId: _application.instrument,
     });
     if (!application)
       return {
@@ -102,8 +102,8 @@ const updateApplication = async (_application: ApplicationType) => {
         y: _application.y,
         radius: _application.y,
         status: _application.status,
-        user_id: _application.user,
-        instrument_id: _application.instrument,
+        userId: _application.user,
+        instrumentId: _application.instrument,
       },
       {
         where: {
@@ -172,7 +172,7 @@ class ApplicationController {
 
   async getApplications(req: express.Request, res: express.Response) {
     try {
-      const applications = await Application.findAll({ where: { user_id: req.user!.data.id } });
+      const applications = await Application.findAll({ where: { userId: req.user!.data.id } });
       const result: IGetApplicationsResult = { status: true, applications };
       res.send(result);
     } catch (error) {

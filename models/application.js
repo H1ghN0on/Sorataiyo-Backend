@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Application.belongsTo(models.Instrument, { foreignKey: "instrument_id" });
       Application.belongsTo(models.User, { foreignKey: "user_id" });
+      Application.hasMany(models.Session);
     }
   }
   Application.init(
@@ -17,13 +18,13 @@ module.exports = (sequelize, DataTypes) => {
       x: DataTypes.DECIMAL,
       y: DataTypes.DECIMAL,
       radius: DataTypes.DECIMAL,
-      instrument_id: {
+      instrumentId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: { model: "Instruments", key: "id" },
       },
       status: DataTypes.STRING,
-      user_id: {
+      userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: { model: "Users", key: "id" },

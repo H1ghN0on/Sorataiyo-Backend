@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Session.hasMany(models.RecordsResult);
-      Session.belongsTo(models.Application);
+      Session.belongsTo(models.Application, { foreignKey: "application_id" });
     }
   }
   Session.init(

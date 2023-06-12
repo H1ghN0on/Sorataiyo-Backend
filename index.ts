@@ -8,7 +8,7 @@ import session from "express-session";
 import "./config/db";
 import { passport } from "./config/passport";
 
-import { ApplicationController, UserController } from "./controllers";
+import { ApplicationController, SessionController, UserController } from "./controllers";
 
 const app = express();
 
@@ -70,6 +70,18 @@ app.delete(
   "/applications/delete/:id",
   passport.authenticate("jwt", { session: false }),
   ApplicationController.deleteApplication
+);
+
+//Session Controller
+app.get(
+  "/results/sessions",
+  passport.authenticate("jwt", { session: false }),
+  SessionController.getUserSessions
+);
+app.get(
+  "/results/sessions/:id",
+  passport.authenticate("jwt", { session: false }),
+  SessionController.getSessionResults
 );
 
 app.listen(process.env.PORT || 8000, () => {
